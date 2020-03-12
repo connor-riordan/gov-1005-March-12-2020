@@ -65,6 +65,21 @@ train %>%
 
 1) Now that we know the difference in mean income between treated and control in this sample, we want to get a confidence interval for that difference. If we had sampled commuters other than the ones that we did sample, the difference would be different. How different might it be? Are these results consistent with the claim, made in the article, that treatment was randomly assigned?
 
+```{r}
+
+train %>% 
+  rep_sample_n(size = 115, replace = TRUE, reps = 1000) %>%
+  group_by(replicate, treatment) %>%
+  summarise(avg_inc = mean(income)) %>% 
+  pivot_wider(names_from = treatment, values_from = avg_inc) %>% 
+  mutate(Difference = Treated - Control) %>%
+  select(replicate, Difference, everything()) %>%
+  pull(Difference) %>%
+  quantile(c(0.025, 0.975))
+
+ 
+
+```
 
 
 
@@ -74,9 +89,32 @@ train %>%
 
 3) What is the difference in att_chg between the Treated and Control?
 
+```{r}
+
+all_att_chg <- train %>% 
+  rep_sample_n(size = 115, replace = TRUE, reps = 3) %>%
+  group_by(replicate, treatment) %>%
+  summarise(avg_att_chg = mean(att_chg)) %>% 
+  pivot_wider(names_from = treatment, values_from = avg_att_chg) %>% 
+  mutate(Difference = Treated - Control) %>%
+  select(replicate, Difference, everything()) %>%
+  pull(Difference) %>%
+  mean()
+
+
+
+```
 
 
 4) What is a 99% confidence intervals for that difference?
+
+```{r}
+
+all_att_chg %>%
+
+
+
+```
 
 
 
